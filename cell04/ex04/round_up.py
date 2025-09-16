@@ -1,3 +1,4 @@
 #!/usr/bin/env python3
+import math
 inp = input("Give me a number: ")
-print(int(float(inp)) + (float(inp) != int(float(inp))))
+print(math.ceil(float(inp)))
