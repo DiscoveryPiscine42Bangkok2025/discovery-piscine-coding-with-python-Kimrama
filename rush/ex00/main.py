@@ -1,168 +1,133 @@
 from checkmate import checkmate
 
-def main() :
-    board = """\
+def print_board(board: str):
+    for row in board.split("\n"):
+        print(" ".join(row))
+    print()
+
+def run_test(name: str, board: str):
+    print(f"=== {name} ===")
+    print_board(board)
+    checkmate(board)
+    print()
+
+def main():
+    # 1) Pawn check (Success)
+    board1 = """\
 R...
 .K..
 ..P.
-....\
-"""
-    checkmate(board)
-    print("# มีแต่คิง (fail)")
+...."""
+    run_test("Pawn attacks King (Success)", board1)
+
+    # 2) No check (Fail)
     board2 = """\
-..
-.K\
-"""
-    checkmate(board2)  # คาดว่า "Fail"
-
-
-    print("# 1) Rook ตรงคอลัมน์ (Success)")
-    board = """\
-.R.
-.K.
-...\
-"""
-    checkmate(board)
-
-    print("# 2) Rook มี Pawn ขวาง (Fail)")
-    board = """\
-RPK
-...
-...\
-"""
-    checkmate(board)
-
-    print("# 3) Bishop ทแยงไม่ถูกบล็อก (Success)")
-    board = """\
-B..
-.K.
-...\
-"""
-    checkmate(board)
-
-    print("# 4) Bishop ถูกบล็อกโดย Pawn (Fail)")
-    board = """\
-B..
-.P.
-..K\
-"""
-    checkmate(board)
-
-    print("# 5) Queen โจมตีทแยง (Success)")
-    board = """\
-Q..
-.K.
-...\
-"""
-    checkmate(board)
-
-    print("# 6) Knight โจมตี")
-    board = """\
-N..
-...
-.K.\
-"""
-    checkmate(board)
-
-    print("# 7) Pawn โจมตี (Success)")
-    board = """\
-...
-.K.
-P..\
-"""
-    checkmate(board)
-
-    print("# 8) Pawn ใต้คิงแต่ไม่ทแยง (Fail)")
-    board = """\
-...
-.K.
-.P.\
-"""
-    checkmate(board)
-
-    print("# 9) Invalid 2*3")
-    board = """\
-R.K
-...\
-"""
-    checkmate(board)
-
-    print("# 10)Invalid 1*3")
-    board = """\
-R.K\
-"""
-    checkmate(board)
-
-    print("# 11) Invalid 2*4")
-    board = """\
-K...
-.Q..\
-"""
-    checkmate(board)
-
-    print("# 12) ไม่มีศัตรู (Fail)")
-    board = """\
-...
-.K.
-...\
-"""
-    checkmate(board)
-
-    print("# 13) Bishop หลัง Rook (Fail)")
-    board = """\
-....
+R...
 .K..
-..R.
-...B\
-"""
-    checkmate(board)
+....
+...."""
+    run_test("No piece attacks King (Fail)", board2)
 
-    print("# 14) Queen หลัง Pawn (Fail)")
-    board = """\
-.Q.
-.P.
-.K.\
-"""
-    checkmate(board)
+    # 3) Multiple kings (Error)
+    board3 = """\
+K...
+....
+...K
+...."""
+    run_test("Multiple Kings (Error)", board3)
 
-    print("# 15) Knight  ")
-    board = """\
-K..
-...
-.N.\
-"""
-    checkmate(board)
-    
-    print("#16) double king (invalid board)")
-    board = """\
-Q..
-.KK
-...\
-"""
-    checkmate(board)
+    # 4) Invalid character (Error)
+    board4 = """\
+R...
+.K..
+..X.
+...."""
+    run_test("Invalid Character (Error)", board4)
 
-    print("#17) no board")
-    board = None
-    checkmate(board)
+    # 5) Not square (Error)
+    board5 = """\
+R....
+.K..
+..P.
+...."""
+    run_test("Not Square Board (Error)", board5)
 
-    print("#18) empty board")
-    board = """\
+    # 6) No King (Error)
+    board6 = """\
+R...
+....
+....
+...."""
+    run_test("No King (Error)", board6)
+
+    # 7) Rook attacks King vertically (Success)
+    board7 = """\
+R...
+.K..
+R...
+...."""
+    run_test("Rook attacks King vertically (Success)", board7)
+
+    # 8) Rook attacks King horizontally (Success)
+    board8 = """\
+...R
+.K..
+....
+...."""
+    run_test("Rook attacks King horizontally (Success)", board8)
+
+    # 9) Bishop attacks King (Success)
+    board9 = """\
+B...
+.K..
+....
+...."""
+    run_test("Bishop attacks King (Success)", board9)
+
+    # 10) Queen attacks King diagonally (Success)
+    board10 = """\
+Q...
+.K..
+....
+...."""
+    run_test("Queen attacks King diagonally (Success)", board10)
+
+    # 11) Queen attacks King horizontally (Success)
+    board11 = """\
+..QK
+....
+....
+...."""
+    run_test("Queen attacks King horizontally (Success)", board11)
+
+    # 12) Pawn at top edge (Fail, cannot attack outside board)
+    board12 = """\
+..P.
+.K..
+....
+...."""
+    run_test("Pawn at top edge (Fail)", board12)
+
+    # 13) King surrounded but not attacked (Fail)
+    board13 = """\
+....
+.RK.
+.B..
+...."""
+    run_test("King blocked but not attacked (Fail)", board13)
+
+    # 14) Space normalization (Success)
+    board14 = """\
+R...
+ K..
+  P.
+....
 """
-    checkmate(board)
+    run_test("Space normalization (Success)", board14)
 
-    print("#19) 9*9 board")
-    board = """\
-R........
-.K.......
-..P......
-.........
-.........
-.........
-.........
-.........
-.........\
-"""
-    checkmate(board)
+    # 15) Empty 1x1 board with King only (Fail, no attackers)
+    board15 = "K"
+    run_test("Single King only 1x1 (Fail)", board15)
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     main()
