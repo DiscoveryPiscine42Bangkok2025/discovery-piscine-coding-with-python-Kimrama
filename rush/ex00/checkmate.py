@@ -2,14 +2,17 @@ def check_board_dimension(board: str) -> int | None:
     rows = board.split("\n")
     n = len(rows)
     if n == 0:
-        print("Error")
+        print("Error1 ไม่มีแถว")
         return None
+    
     if any(len(row) != n for row in rows):
-        print("Error")
+        print("Error2 ไม่จตุรัส")
         return None
     return n
 
 def normalize_board(board: str) -> str:
+    if board is None:
+        return None
     return board.replace(" ", ".")
 
 def validate_piece(piece: str) -> bool:
@@ -20,16 +23,16 @@ def validate_board(board: str, n: int) -> bool:
     king_count = 0
     for row in rows:
         if len(row) != n:
-            print("Error")
+            print("Error3")
             return False
         for ch in row:
             if not validate_piece(ch):
-                print("Error")
+                print("invalid piece")
                 return False
             if ch == 'K':
                 king_count += 1
     if king_count != 1:
-        print("Error")
+        print("Error5 : king is more than 1")
         return False
     return True
 
@@ -67,6 +70,8 @@ def check_line(board: list[list[str]], row: int, col: int, king: tuple[int, int]
 
 def checkmate(board: str) -> None:
     board = normalize_board(board)
+    if board is None:
+        print("Error1: Board is None"); return
     n = check_board_dimension(board)
     if n is None or not validate_board(board, n):
         return
@@ -77,6 +82,7 @@ def checkmate(board: str) -> None:
     for r in range(n):
         for c in range(n):
             piece = board_matrix[r][c]
+            
             if piece in {'.', 'K'}:
                 continue
             if piece == 'P' and check_pawn(r, c, king, n):
