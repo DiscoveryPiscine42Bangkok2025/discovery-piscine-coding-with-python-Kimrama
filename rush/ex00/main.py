@@ -108,13 +108,13 @@ Q...
 ...."""
     run_test("Pawn at top edge (Fail)", board12)
 
-    # 13) King surrounded but not attacked (Fail)
+    # 13) King surrounded (Success)
     board13 = """\
 ....
 .RK.
 .B..
 ...."""
-    run_test("King blocked but not attacked (Fail)", board13)
+    run_test("King attacked (Success)", board13)
 
     # 14) Space normalization (Success)
     board14 = """\
